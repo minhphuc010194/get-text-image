@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useRef } from "react";
 import Tesseract, { RecognizeResult, LoggerMessage } from "tesseract.js";
 import {
    Box,
@@ -11,6 +11,7 @@ import {
    WrapItem,
    Progress,
 } from "@/components";
+import { textToHtml } from "@/services";
 
 export const TextFromImage = () => {
    const [text, setText] = useState("");
@@ -22,6 +23,8 @@ export const TextFromImage = () => {
       userJobId: "",
       workerId: "",
    });
+   const canvasRef = useRef<HTMLCanvasElement>(null);
+   const imageRef = useRef<HTMLImageElement>(null);
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -29,6 +32,14 @@ export const TextFromImage = () => {
       setImagePath(URL.createObjectURL(file));
    };
    const getText = () => {
+      // const canvas = canvasRef.current as HTMLCanvasElement;
+      // const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+      // ctx.drawImage(imageRef.current as HTMLImageElement, 0, 0);
+      // ctx.putImageData(preprocessImage(canvas), 0, 0);
+      // const dataUrl = canvas.toDataURL("image/jpeg");
+      // console.log("dataUrl :>> ", dataUrl);
+
       Tesseract.recognize(imagePath, "eng", {
          logger: (m) => {
             // console.log("logger=> ", m);
@@ -42,7 +53,7 @@ export const TextFromImage = () => {
             // Get Confidence score
             console.log("result :>> ", result);
             if (result?.data) {
-               setText(result?.data.text);
+               setText(textToHtml(result?.data.text));
                setLoading(undefined);
             }
          });
@@ -54,7 +65,11 @@ export const TextFromImage = () => {
          </Box>
          <HStack spacing={3} justify="center" w="100%" mt={3}>
             <Box textAlign="center">
-               <Input onChange={handleChange} type="file" />
+               <Input
+                  onChange={handleChange}
+                  type="file"
+                  accept="image/png, image/gif, image/jpeg"
+               />
             </Box>
             <Box>
                <Button isLoading={!!loading?.progress} onClick={getText}>
@@ -62,10 +77,13 @@ export const TextFromImage = () => {
                </Button>
             </Box>
          </HStack>
-         <Wrap spacing={1} justify="center">
+         <Wrap spacing={1}>
             <WrapItem w="45%">
-               <Image src={imagePath} pointerEvents="none" />
+               <Image ref={imageRef} src={imagePath} pointerEvents="none" />
             </WrapItem>
+            {/* <WrapItem>
+               <canvas ref={canvasRef} width={700} height={250} />
+            </WrapItem> */}
             <WrapItem w="45%">
                <Box mt={2}>
                   {loading?.progress ? (
@@ -73,17 +91,25 @@ export const TextFromImage = () => {
                         <Box textAlign="center" color="blue">
                            {Math.floor(loading.progress * 100)}%
                         </Box>
-                        <Progress value={loading.progress * 100} />
+                        <Progress
+                           value={loading.progress * 100}
+                           hasStripe
+                           rounded={10}
+                        />
                         {loading.status}
                      </Box>
                   ) : (
-                     <Box
-                        background="#fff"
-                        color="#333"
-                        rounded={5}
-                        textAlign="center"
-                     >
-                        {text}
+                     <Box>
+                        {text && (
+                           <Heading fontSize="smaller">Simple Text:</Heading>
+                        )}
+
+                        <Box
+                           background="#fff"
+                           color="#333"
+                           rounded={5}
+                           dangerouslySetInnerHTML={{ __html: text }}
+                        />
                      </Box>
                   )}
                </Box>
