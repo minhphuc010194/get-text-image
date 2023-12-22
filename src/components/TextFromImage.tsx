@@ -10,8 +10,11 @@ import {
    Button,
    WrapItem,
    Progress,
+   TableView,
+   Container,
 } from "@/components";
-import { textToHtml } from "@/services";
+import { textToHtml, detectCurrency } from "@/services";
+import { DataType } from "@/utils/types";
 
 export const TextFromImage = () => {
    const [text, setText] = useState("");
@@ -25,6 +28,7 @@ export const TextFromImage = () => {
    });
    // const canvasRef = useRef<HTMLCanvasElement>(null);
    const imageRef = useRef<HTMLImageElement>(null);
+   const [data, setData] = useState<DataType[]>([]);
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -42,7 +46,6 @@ export const TextFromImage = () => {
 
       Tesseract.recognize(imagePath, "eng", {
          logger: (m) => {
-            // console.log("logger=> ", m);
             setLoading(m);
          },
       })
@@ -51,18 +54,30 @@ export const TextFromImage = () => {
          })
          .then((result: RecognizeResult | void) => {
             // Get Confidence score
-            console.log("result :>> ", result);
+
             if (result?.data) {
+               // console.log("result :>> ", result);
+               const strs = result.data?.text.split("\n");
+               const dataTemp: DataType[] = [];
+               strs.map((str: string) => {
+                  const item = detectCurrency(str);
+                  if (item) {
+                     dataTemp.push(item);
+                  }
+               });
+               setData(dataTemp);
                setText(textToHtml(result?.data.text));
                setLoading(undefined);
             }
          });
    };
+
    return (
       <Box>
          <Box>
             <Heading textAlign="center">Get Text From Image</Heading>
          </Box>
+
          <HStack spacing={3} justify="center" w="100%" mt={3}>
             <Box textAlign="center">
                <Input
@@ -93,7 +108,7 @@ export const TextFromImage = () => {
             <WrapItem w="45%">
                <Box mt={2}>
                   {loading?.progress ? (
-                     <Box>
+                     <Box w="200px">
                         <Box textAlign="center" color="blue">
                            {Math.floor(loading.progress * 100)}%
                         </Box>
@@ -104,7 +119,12 @@ export const TextFromImage = () => {
                         />
                      </Box>
                   ) : (
-                     <Box>
+                     <Box
+                        height={250}
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                        overflowY="auto"
+                     >
                         {text && (
                            <Heading fontSize="smaller">Simple Text:</Heading>
                         )}
@@ -120,6 +140,12 @@ export const TextFromImage = () => {
                </Box>
             </WrapItem>
          </Wrap>
+         <Box as="br" />
+         {data.length > 0 && (
+            <Container>
+               <TableView data={data} />
+            </Container>
+         )}
       </Box>
    );
 };
