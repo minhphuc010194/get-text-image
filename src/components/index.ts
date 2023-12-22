@@ -1,2 +1,3 @@
-export * from "./TextFromImage";
 export * from "@chakra-ui/react";
+export * from "./TableView";
+export * from "./TextFromImage";

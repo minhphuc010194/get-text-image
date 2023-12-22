@@ -305,3 +305,19 @@ export const textToHtml = (text: string) => {
       })
       .join("");
 };
+export const detectCurrency = (text: string = "") => {
+   const currencyRegex = /[$€]/g;
+   const matches = text.match(currencyRegex);
+   if (matches) {
+      // console.log("Currency symbols found:", matches);
+      const value = text.split(currencyRegex);
+      return {
+         food: value?.[0],
+         price: value?.[1],
+         currency: matches,
+      };
+   } else {
+      console.log("No currency symbols found.");
+      return undefined;
+   }
+};
