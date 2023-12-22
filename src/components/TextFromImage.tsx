@@ -23,7 +23,7 @@ export const TextFromImage = () => {
       userJobId: "",
       workerId: "",
    });
-   const canvasRef = useRef<HTMLCanvasElement>(null);
+   // const canvasRef = useRef<HTMLCanvasElement>(null);
    const imageRef = useRef<HTMLImageElement>(null);
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
