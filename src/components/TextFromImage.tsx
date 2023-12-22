@@ -72,7 +72,13 @@ export const TextFromImage = () => {
                />
             </Box>
             <Box>
-               <Button isLoading={!!loading?.progress} onClick={getText}>
+               <Button
+                  colorScheme="blue"
+                  isDisabled={!imagePath}
+                  isLoading={!!loading?.progress}
+                  onClick={getText}
+                  loadingText={loading?.status + "..."}
+               >
                   GET TEXT
                </Button>
             </Box>
@@ -96,7 +102,6 @@ export const TextFromImage = () => {
                            hasStripe
                            rounded={10}
                         />
-                        {loading.status}
                      </Box>
                   ) : (
                      <Box>
