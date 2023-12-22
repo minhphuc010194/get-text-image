@@ -13,3 +13,5 @@
   ➜  Network: use --host to expose
   ➜  press h + enter to show help
 ```
+
+![image](https://github.com/minhphuc010194/get-text-image/assets/58540065/b6a968da-6b20-4b32-bcde-eb741cb472ab)
