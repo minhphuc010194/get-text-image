@@ -24,8 +24,8 @@ dependencies:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
   tesseract.js:
-    specifier: 5.0.4
-    version: 5.0.4
+    specifier: 5.0.5
+    version: 5.0.5
   vite-tsconfig-paths:
     specifier: 4.3.1
     version: 4.3.1(typescript@5.3.3)(vite@5.0.10)
@@ -3334,8 +3334,8 @@ packages:
     resolution: {integrity: sha512-lJur5LzjinW5VYMKlVNnBU2JPLpO+A9VqAYBeuV+ZgH0hKvsnm+536Yyp+/zRTBdLe7D6Kok0FN9g+TE4J8qGA==}
     dev: false
 
-  /tesseract.js@5.0.4:
-    resolution: {integrity: sha512-GCIoSQMZlvTP2AaHrjUOH29/oyO7ZyHVe+BhTexEcO7/nDClRVDRjl2sYJLOWSSNbTDrm5q2m1+gfaf3lUrZ5Q==}
+  /tesseract.js@5.0.5:
+    resolution: {integrity: sha512-xtTfec4IynE63sl6kAFkGl1mejlNxr9qQXzVGAUHd7IPdQXveopjGO9Eph6xkSuW5sUCC9AT6VdBmODh8ZymGg==}
     requiresBuild: true
     dependencies:
       bmp-js: 0.1.0
